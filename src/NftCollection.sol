@@ -3,17 +3,22 @@
 pragma solidity 0.8.34;
 
 import "../lib/openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
+import {Strings} from "../lib/openzeppelin-contracts/contracts/utils/Strings.sol";
 
 contract NftCollection is ERC721{
 
+    using Strings for uint256;
+
     uint256 public currentTokenId = 0;
-    uint256 public totalSupply;
+    uint256 public totalSupply;  // i.e: totalSupply = 10 -> [0-9]
+    string public baseUri;
 
     event NftMinted(address user, uint256 tokenId);
 
-    constructor(string memory name_, string memory symbol_, uint256 totalSupply_) ERC721(name_, symbol_) {
+    constructor(string memory name_, string memory symbol_, uint256 totalSupply_, string memory baseUri_) ERC721(name_, symbol_) {
         totalSupply = totalSupply_;
-    }    
+        baseUri = baseUri_;
+    }
 
     function mint() external {
         require(currentTokenId < totalSupply, "Cannot create more tokens");
@@ -21,6 +26,17 @@ contract NftCollection is ERC721{
         currentTokenId++;
 
         emit NftMinted(msg.sender, currentTokenId--);
+    }
+
+    function _baseURI() internal override view virtual returns (string memory) {
+        return baseUri;
+    }
+
+    function tokenURI(uint256 tokenId) public override view virtual returns (string memory) {
+        _requireOwned(tokenId);
+
+        string memory baseURI = _baseURI();
+        return bytes(baseURI).length > 0 ? string.concat(baseURI, tokenId.toString(), ".json") : "";
     }
 
 }

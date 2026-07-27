@@ -1,0 +1,11 @@
+{
+    "name": "My NFT 0",
+    "description": "NFT part of a collection",
+    "image": "ipfs://bafkreifnojwo3gdxh25kpy32ofkbnet2staoz7nfkuozfnzilf2736vp64",
+    "attributes": [
+        {
+            "trait_type": "Rarity",
+            "value": 0
+        }
+    ]
+}
