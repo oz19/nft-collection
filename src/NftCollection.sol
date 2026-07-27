@@ -23,9 +23,10 @@ contract NftCollection is ERC721{
     function mint() external {
         require(currentTokenId < totalSupply, "Cannot create more tokens");
         _safeMint(msg.sender, currentTokenId);
+        uint256 newTokenId = currentTokenId;
         currentTokenId++;
 
-        emit NftMinted(msg.sender, currentTokenId--);
+        emit NftMinted(msg.sender, newTokenId);
     }
 
     function _baseURI() internal override view virtual returns (string memory) {
